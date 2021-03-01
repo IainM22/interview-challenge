@@ -23,7 +23,7 @@ const Table = ({ data, columns, sortColumn, sortDirection, onHeaderClick }) => {
       }
 
       return (
-        <Image width="10px" height="10px" src={imgLocation} sx={{ marginLeft: '5px' }} />
+        <Image width="10px" height="10px" src={imgLocation} sx={{ marginLeft: '8px' }} />
       )
     }
 
@@ -33,10 +33,13 @@ const Table = ({ data, columns, sortColumn, sortDirection, onHeaderClick }) => {
           onHeaderClick(column.dataIndex)
         }}
         sx={{
-          borderBottom: '2px solid #d8d8d8',
+          borderBottom: `1px solid rgba(255,255,255,${
+            sortColumn === column.dataIndex ? 0.64 : 0.25
+          })`,
           padding: '20px 10px',
-          opacity: sortColumn === column.dataIndex ? '1' : '0.6',
-          fontSize: '12px',
+          opacity: sortColumn === column.dataIndex ? '1' : '0.64',
+          fontSize: '11px',
+          fontWeight: '500',
           ':hover': {
             opacity: '1',
           },
@@ -56,14 +59,24 @@ const Table = ({ data, columns, sortColumn, sortDirection, onHeaderClick }) => {
 
   const TableRow = ({ row }) => {
     return (
-      <>
+      <Grid
+        gap={0}
+        columns={columns.length}
+        sx={{
+          cursor: 'default',
+          ':hover': {
+            background: 'rgba(255,255,255,0.02)',
+          },
+        }}
+      >
         {columns.map((column) => {
           return (
             <Box
               key={`${row.id}_${column.dataIndex}`}
               sx={{
                 padding: '20px 10px',
-                fontSize: '18px',
+                fontSize: '16px',
+                lineHeight: '24px',
                 opacity: sortColumn === column.dataIndex ? '1' : '0.6',
               }}
             >
@@ -73,19 +86,21 @@ const Table = ({ data, columns, sortColumn, sortDirection, onHeaderClick }) => {
             </Box>
           )
         })}
-      </>
+      </Grid>
     )
   }
 
   return (
-    <Grid gap={0} columns={columns.length} sx={{ cursor: 'pointer' }}>
-      {columns.map((column) => {
-        return <TableHeader key={column.dataIndex} column={column} />
-      })}
+    <>
+      <Grid gap={0} columns={columns.length} sx={{ cursor: 'default' }}>
+        {columns.map((column) => {
+          return <TableHeader key={column.dataIndex} column={column} />
+        })}
+      </Grid>
       {data.map((row) => {
         return <TableRow key={row.id} row={row} />
       })}
-    </Grid>
+    </>
   )
 }
 

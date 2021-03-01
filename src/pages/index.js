@@ -1,4 +1,4 @@
-import { Box, Spinner, Flex } from 'theme-ui'
+import { Box, Spinner, Flex, Text } from 'theme-ui'
 import { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
@@ -58,12 +58,17 @@ const Index = () => {
    */
   const renderTokenValue = (bigNum) => {
     const parsedNum = Math.round(Number(bigNum) / 10 ** 18)
-    return `${parsedNum.toLocaleString()} GRT`
+    return (
+      <Flex sx={{ alignItems: 'center' }}>
+        {parsedNum.toLocaleString()}
+        <Text sx={{ fontSize: '10px', lineHeight: '12px', marginLeft: '3px' }}>GRT</Text>
+      </Flex>
+    )
   }
 
   const columns = [
     {
-      title: 'ID',
+      title: 'EPOCH',
       dataIndex: 'id',
     },
     {

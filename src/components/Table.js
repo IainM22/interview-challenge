@@ -15,8 +15,8 @@ const Table = ({ data, columns, sortColumn, sortDirection, onHeaderClick }) => {
 
       let imgLocation = ''
 
-      // always show ascending arrow on hover
-      if (hovered || sortDirection === 'asc') {
+      // always show ascending arrow on hover (unless its on selected column)
+      if ((hovered && sortColumn !== column.dataIndex) || sortDirection === 'asc') {
         imgLocation = '/images/Direction-Down.svg'
       } else {
         imgLocation = '/images/Direction-Up.svg'

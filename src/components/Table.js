@@ -34,7 +34,7 @@ const Table = ({ data, columns, sortColumn, sortDirection, onHeaderClick }) => {
         }}
         sx={{
           borderBottom: '2px solid #d8d8d8',
-          padding: '10px',
+          padding: '20px 10px',
           opacity: sortColumn === column.dataIndex ? '1' : '0.6',
           fontSize: '12px',
           ':hover': {
@@ -62,7 +62,8 @@ const Table = ({ data, columns, sortColumn, sortDirection, onHeaderClick }) => {
             <Box
               key={`${row.id}_${column.dataIndex}`}
               sx={{
-                padding: '10px',
+                padding: '20px 10px',
+                fontSize: '18px',
                 opacity: sortColumn === column.dataIndex ? '1' : '0.6',
               }}
             >

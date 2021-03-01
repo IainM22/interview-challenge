@@ -5,22 +5,24 @@ import { useQuery } from '@apollo/react-hooks'
 import { withApollo } from '../apollo/client'
 import { EPOCHES_QUERY } from '../apollo/queries'
 import Table from '../components/Table'
+import Search from '../components/Search'
 
 const Index = () => {
   const QUERY_CHUNK_SIZE = 3
   const [sortColumn, setSortColumn] = useState('startBlock')
   const [sortDirection, setSortDirection] = useState('asc')
-  const [skip, setSkip] = useState(0)
+  const [searchVal, setSearchVal] = useState('')
+  const [numRows, setNumRows] = useState(QUERY_CHUNK_SIZE)
 
   /**
    * Fetch data from subgraph
    */
   const { loading, error, data } = useQuery(EPOCHES_QUERY, {
     variables: {
-      first: QUERY_CHUNK_SIZE,
-      skip,
+      first: numRows,
       orderBy: sortColumn,
       orderDirection: sortDirection,
+      filter: searchVal.length > 0 ? { startBlock: Number(searchVal) } : {},
     },
   })
 
@@ -35,6 +37,13 @@ const Index = () => {
     } else {
       setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'))
     }
+  }
+
+  /**
+   * Fetch more rows
+   */
+  const loadMore = () => {
+    setNumRows((prev) => prev + QUERY_CHUNK_SIZE)
   }
 
   /**
@@ -107,9 +116,50 @@ const Index = () => {
     )
   }
 
+  const LoadMoreButton = () => {
+    // don't show while no data is displayed
+    if (loading || error) {
+      return null
+    }
+
+    // don't show if no data is left to query
+    if (data.epoches.length < numRows) {
+      return null
+    }
+
+    return (
+      <Box
+        onClick={loadMore}
+        sx={{
+          textAlign: 'center',
+          padding: '15px',
+          background: 'transparent',
+          border: '1px solid rgba(147,106,255,0.5)',
+          borderRadius: '5px',
+          width: '150px',
+          cursor: 'pointer',
+          fontWeight: 600,
+          ':hover': {
+            boxShadow:
+              'rgba(111,76,255,0.32) 0px 0px 8px 0px, rgba(111,76,255,0.32) 0px 0px 6px 0px, rgba(111,76,255,0.32) 0px 0px 6px 0px inset',
+            borderColor: '#6F4CFF',
+          },
+        }}
+      >
+        Load More
+      </Box>
+    )
+  }
+
   return (
     <Box sx={{ padding: '30px 100px' }}>
-      <TableContent />
+      <Search searchVal={searchVal} setSearchVal={setSearchVal} />
+      <Box sx={{ marginTop: '50px' }}>
+        <TableContent />
+      </Box>
+      <Flex sx={{ marginTop: '25px', justifyContent: 'center' }}>
+        <LoadMoreButton />
+      </Flex>
     </Box>
   )
 }

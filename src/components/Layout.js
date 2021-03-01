@@ -26,7 +26,7 @@ const Layout = ({ children, page }) => {
           margin: 0;
           padding: 0;
           overflow-x: hidden !important;
-          background: url('/images/Background@2x.jpg') no-repeat;
+          background: url('/images/Background@2x.jpg') no-repeat center center fixed;
         }
         ul,
         ol,
